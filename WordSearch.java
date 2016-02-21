@@ -77,9 +77,9 @@ public class WordSearch {
 	public static boolean checkForWordHorizontal(int row, int col, String userWord, char[][] currentBoard) {
 		boolean outcome;
 		outcome = checkRight(row, col, userWord, currentBoard);
-		if(!outcome) {
-			outcome = checkLeft(row, col, userWord, currentBoard);
-		}
+		//if(!outcome) {
+			//outcome = checkLeft(row, col, userWord, currentBoard);
+		//}
 		return outcome;
 	}
 	public static boolean checkRight(int row, int col, String userWord, char[][] currentBoard) {
