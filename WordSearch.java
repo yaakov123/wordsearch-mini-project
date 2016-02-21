@@ -6,14 +6,14 @@ public class WordSearch {
 		Scanner input = new Scanner(System.in);
 		
 
-		char[][] gameBoardOne = {{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'},
+		char[][] gameBoardOne = {{'L', 'A', 'E', 'D', 'E', 'F', 'L', 'A', 'D'},
 								 {'J', 'K', 'A', 'M', 'N', 'O', 'P', 'Q', 'R'},
 							     {'S', 'V', 'A', 'V', 'A', 'T', 'Y', 'Z', 'A'},
-							     {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'V', 'A'},
-							     {'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R'},
-							     {'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'A'},
-							     {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'},
-								 {'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R'},
+							     {'A', 'B', 'C', 'A', 'A', 'F', 'G', 'V', 'A'},
+							     {'J', 'K', 'A', 'M', 'N', 'O', 'P', 'Q', 'R'},
+							     {'S', 'T', 'C', 'V', 'W', 'X', 'Y', 'Z', 'A'},
+							     {'A', 'B', 'A', 'D', 'E', 'F', 'G', 'H', 'I'},
+								 {'J', 'K', 'T', 'M', 'N', 'O', 'P', 'Q', 'R'},
 							     {'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'A'}};
 		
 		char[][] gameBoardTwo = {{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R'},
@@ -64,15 +64,65 @@ public class WordSearch {
 			for(int j = 0; j < currentBoard[i].length; j++) {
 				if(currentBoard[i][j] == firstLetter) {
 					wordHappens = checkForWordHorizontal(i, j, userWord, currentBoard);
-					//wordHappens = checkForWordVertical(i, j, userWord, currentBoard);
-					//wordHappens = checkForWordDiagonal(i, j, userWord, currentBoard);
 					if(wordHappens) {
 						break outerloop;
 					}
+					wordHappens = checkForWordVertical(i, j, userWord, currentBoard);
+					if(wordHappens) {
+						break outerloop;
+					}
+					//wordHappens = checkForWordDiagonal(i, j, userWord, currentBoard);
+					//if(wordHappens) {
+					//	break outerloop;
+					//}
 				}
 			}
 		}
 		return wordHappens;
+	}
+	
+	//public static boolean checkForWordDiagonal (int row, int col, String userWord, char[][] currentBoard) {
+		//boolean outcome;
+		//outcome = checkDiagonalRight()
+		//return outcome;
+	//}
+	public static boolean checkForWordVertical(int row, int col, String userWord, char[][] currentBoard){
+		boolean outcome;
+		outcome = checkDown(row, col, userWord, currentBoard);
+		if(!outcome) {
+			outcome = checkUp(row, col, userWord, currentBoard);
+		}
+		return outcome;
+	}
+	public static boolean checkUp(int row, int col, String userWord, char[][] currentBoard) {
+		String output = "";
+		int a = 0;
+		
+		while( a < userWord.length()) {
+			if(row >= userWord.length()) {
+				output += currentBoard[row - a][col];
+				if(output.equals(userWord)) {
+					return true;
+				}
+			}
+			a++;
+		}
+		return false;
+	}
+	public static boolean checkDown(int row, int col, String userWord, char[][] currentBoard) {
+		String output = "";
+		int a = 0;
+		
+		while( a < userWord.length()) {
+			if(currentBoard[row].length - row >= userWord.length()) {
+				output += currentBoard[row + a][col];
+				if(output.equals(userWord)) {
+					return true;
+				}
+			}
+			a++;
+		}
+		return false;
 	}
 	public static boolean checkForWordHorizontal(int row, int col, String userWord, char[][] currentBoard) {
 		boolean outcome;
@@ -86,7 +136,7 @@ public class WordSearch {
 		String output = "";
 		int a = 0;
 		while(a <= userWord.length()) {
-			if(currentBoard[row].length - col > userWord.length()) {	
+			if(currentBoard[row].length - col >= userWord.length()) {	
 				output += currentBoard[row][col + a];
 				if(output.equals(userWord)) {
 					return true;
