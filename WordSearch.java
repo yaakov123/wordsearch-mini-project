@@ -11,10 +11,10 @@ public class WordSearch {
 							     {'S', 'V', 'A', 'V', 'A', 'T', 'Y', 'Z', 'A'},
 							     {'A', 'B', 'C', 'A', 'A', 'F', 'G', 'V', 'A'},
 							     {'J', 'K', 'A', 'M', 'N', 'O', 'P', 'Q', 'R'},
-							     {'S', 'T', 'C', 'V', 'W', 'X', 'Y', 'Z', 'A'},
-							     {'A', 'B', 'A', 'D', 'E', 'F', 'G', 'H', 'I'},
+							     {'S', 'T', 'C', 'V', 'W', 'X', 'Z', 'Z', 'L'},
+							     {'A', 'B', 'A', 'D', 'E', 'F', 'G', 'H', 'Y'},
 								 {'J', 'K', 'T', 'M', 'N', 'O', 'P', 'Q', 'R'},
-							     {'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'A'}};
+							     {'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'E'}};
 		
 		char[][] gameBoardTwo = {{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R'},
 								 {'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R'},
@@ -25,7 +25,7 @@ public class WordSearch {
 								 {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R'},
 								 {'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R'},
 								 {'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'A', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R'},
-								 {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R'},
+								 {'A', 'B', 'C', 'D', 'E', 'N', 'M', 'A', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R'},
 								 {'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R'},
 								 {'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'A', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R'},
 								 {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R'},
@@ -135,8 +135,8 @@ public class WordSearch {
 	public static boolean checkRight(int row, int col, String userWord, char[][] currentBoard) {
 		String output = "";
 		int a = 0;
-		while(a <= userWord.length()) {
-			if(currentBoard[row].length - col >= userWord.length()) {	
+		while(a < userWord.length()) {
+			if(currentBoard[row].length - col > userWord.length() - 1) {	
 				output += currentBoard[row][col + a];
 				if(output.equals(userWord)) {
 					return true;
