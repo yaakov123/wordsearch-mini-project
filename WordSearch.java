@@ -1,10 +1,15 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 
 public class WordSearch {
 	public static void main(String[] args) {
 		Scanner input = new Scanner(System.in);
+		boolean isOfficialWord;
 		//Laid Wed Stop From Fed
+		String[] wordsInGameBoardOne = {"LAID", "WED", "STOP", "FROM", "FED", "VAT"};
+		String[] wordsInGameBoardTwo = {"This"}; // The reason for this array is so I could add the code for the words in the second board
+		ArrayList<String> wordsGuessed = new ArrayList<String>(wordsInGameBoardOne.length);
 
 		char[][] gameBoardOne = {{'L', 'A', 'I', 'D', 'E', 'F', 'L', 'A', 'D'},
 								 {'J', 'A', 'A', 'M', 'N', 'O', 'P', 'Q', 'R'},
@@ -60,11 +65,38 @@ public class WordSearch {
 			
 			
 			boolean happens = checkForWord(currentBoard, userWord, firstLetter);
-			System.out.println(happens);
+			if(currentBoard == gameBoardOne) {
+				isOfficialWord = checkForWordInArray(userWord, wordsInGameBoardOne);
+			}
+			else {
+				isOfficialWord = checkForWordInArray(userWord, wordsInGameBoardTwo);
+			}
+			if(wordsGuessed.contains(userWord)) {
+				System.out.println("You already guessed that!");
+			}
+			else if(happens && isOfficialWord) {
+				System.out.println("That is correct!");
+				wordsGuessed.add(userWord);
+			}
+			else if(happens && !isOfficialWord){
+				System.out.println("It seems that you have discovered a new word! Good for you!");
+			}
+			else {
+				System.out.println("I can't find that word.");
+			}
 			
 			System.out.println("Do you want to continue?");
 			continuePlaying = input.nextLine().toUpperCase();
 		}
+	}
+	
+	public static boolean checkForWordInArray(String userWord, String[] officalWords) {
+		for(int i = 0; i < officalWords.length; i++) {
+			if(officalWords[i].equals(userWord)) {
+				return true;
+			}
+		}
+		return false;
 	}
 	public static boolean checkForWord(char[][] currentBoard, String userWord, char firstLetter) {
 		boolean wordHappens = false;
