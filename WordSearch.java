@@ -8,8 +8,8 @@ public class WordSearch {
 		boolean isOfficialWord;
 		boolean continuePlaying = true; //used to determine whether or not the player wants to exit
 		int guesses = 20; //amount of guesses allowed for the game 
-		int amountOfGuesses = 0; //amount of guesses the player has already made 
-		//Laid Wed Stop From Fed
+		int guessesUsed = 0; //amount of guesses the player has already made 
+		// Changed the variable name to guessesUsed it makes a little more sense to me
 		String[] wordsInGameBoardOne = {"LAID", "WED", "STOP", "FROM", "FED", "VAT"};
 		String[] wordsInGameBoardTwo = {"This"}; // The reason for this array is so I could add the code for the words in the second board
 		ArrayList<String> wordsGuessed = new ArrayList<String>(wordsInGameBoardOne.length); // I don't understand why the size of the array is wordsInGameBoardOne.length, are you making another array for Board 2? 
@@ -44,11 +44,18 @@ public class WordSearch {
 								 {'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'A', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R'}};
 		
 		
-		System.out.println("Please pick a level of difficulty (easy or hard) >>> ");
-		String boardChoice = input.nextLine().toUpperCase();
+
 		
 		
 		char[][] currentBoard;
+
+		
+	
+		System.out.println("Welcome to WORDSEARCH"); //just an official start to the game 
+		
+		System.out.println("Please pick a level of difficulty (easy or hard) >>> ");
+		String boardChoice = input.nextLine().toUpperCase();
+		
 		if(boardChoice.equals("EASY")) {
 			currentBoard = gameBoardOne;
 		}
@@ -58,12 +65,6 @@ public class WordSearch {
 		else {
 			currentBoard = gameBoardOne;
 		}
-		
-		//String continuePlaying = "YES";
-		//while(continuePlaying.equals("YES")) {
-			//displayBoard(currentBoard);
-			
-		System.out.println("Welcome to WORDSEARCH"); //just an official start to the game 
 		
 		//letting the player know how many words they are looking for
 		if(currentBoard == gameBoardOne) 
@@ -81,16 +82,20 @@ public class WordSearch {
 			System.out.println("Please enter the word you would like to search for or exit to quit the game >>> ");
 			String userWord = input.nextLine().toUpperCase();
 			char firstLetter = userWord.charAt(0);
-			amountOfGuesses++; //calculating how many guesses the player makes 
+			 
 			
 			if(userWord.equals("EXIT")){
-				continuePlaying = false; 
+				//continuePlaying = false; I commented this out because it's not necessary if you're using the break statement
 				System.out.println("You have chosen to exit the game");  
 				break; 
 			}
 			
 			else{
+				guessesUsed++; //calculating how many guesses the player makes
+				//Moved the guessesUsed statement into the else so it only increments if the user doesn't enter exit
+			}	
 			boolean happens = checkForWord(currentBoard, userWord, firstLetter);
+		
 			if(currentBoard == gameBoardOne) {
 				isOfficialWord = checkForWordInArray(userWord, wordsInGameBoardOne);
 			}
@@ -111,8 +116,7 @@ public class WordSearch {
 				System.out.println("I can't find that word.");
 			}
 			
-			//System.out.println("Do you want to continue?");
-			//continuePlaying = input.nextLine().toUpperCase(); 
+
 			
 			//if all words are found let the player know, so far I only coded this for game 1 
 			if(wordsGuessed.size() == wordsInGameBoardOne.length){
@@ -120,11 +124,12 @@ public class WordSearch {
 				break; 
 			}
 		}
-	}		
+			
 			//player used up all 20 guesses 
-			if(amountOfGuesses == 20)
+			if(guessesUsed == 20)
 			   System.out.println("You have used up your 20 guesses. GAME OVER"); 
-	}
+			}
+	
 	
 	public static boolean checkForWordInArray(String userWord, String[] officalWords) {
 		for(int i = 0; i < officalWords.length; i++) {
@@ -285,3 +290,4 @@ public class WordSearch {
 	}
 
 }
+
