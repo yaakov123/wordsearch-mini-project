@@ -6,10 +6,8 @@ public class WordSearch {
 	public static void main(String[] args) {
 		Scanner input = new Scanner(System.in);
 		boolean isOfficialWord;
-		boolean continuePlaying = true; 
-		int guesses = 20; //amount of guesses allowed for the game 
-		int guessesUsed = 0; //amount of guesses the player has already made 
-		// Changed the variable name to guessesUsed it makes a little more sense to me
+		boolean continuePlaying = true; //used to determine whether or not the player wants to exit
+
 		String[] wordsInGameBoardOne = {"LAID", "WED", "STOP", "FROM", "FED", "VAT"};
 		String[] wordsInGameBoardTwo = {"This"}; // The reason for this array is so I could add the code for the words in the second board
 		ArrayList<String> wordsGuessed = new ArrayList<String>(wordsInGameBoardOne.length); // I don't understand why the size of the array is wordsInGameBoardOne.length, are you making another array for Board 2? 
@@ -72,28 +70,22 @@ public class WordSearch {
 		else 
 			System.out.println("There are ... words hidden in the puzzle"); // we haven't yet coded words for the second game board
 			
-		System.out.println("You have 20 chances to find all the words in the puzzle"); //official rules 
-		System.out.println(); //just for layout 
 			
 			displayBoard(currentBoard); //displaying the game board 
 			System.out.println(); //again for layout 
 			
-		for(int i = 0; i<guesses && continuePlaying; i++){	
+		while(continuePlaying){	
 			System.out.println("Please enter the word you would like to search for or exit to quit the game >>> ");
 			String userWord = input.nextLine().toUpperCase();
 			char firstLetter = userWord.charAt(0);
 			 
 			
 			if(userWord.equals("EXIT")){
-				//continuePlaying = false; I commented this out because it's not necessary if you're using the break statement
-				System.out.println("You have chosen to exit the game");  
+				System.out.println("Exiting...");  
 				break; 
 			}
 			
-			else{
-				guessesUsed++; //calculating how many guesses the player makes
-				//Moved the guessesUsed statement into the else so it only increments if the user doesn't enter exit
-			}	
+				
 			boolean happens = checkForWord(currentBoard, userWord, firstLetter);
 		
 			if(currentBoard == gameBoardOne) {
@@ -110,7 +102,7 @@ public class WordSearch {
 				wordsGuessed.add(userWord);
 			}
 			else if(happens && !isOfficialWord){
-				System.out.println("It seems that you have discovered a new word! Good for you!");
+				System.out.println("That word is on the board, but it's not what I was looking for.");
 			}
 			else {
 				System.out.println("I can't find that word.");
@@ -124,11 +116,8 @@ public class WordSearch {
 				break; 
 			}
 		}
+	}
 			
-			//player used up all 20 guesses 
-			if(guessesUsed == 20)
-			   System.out.println("You have used up your 20 guesses. GAME OVER"); 
-			}
 	
 	
 	public static boolean checkForWordInArray(String userWord, String[] officalWords) {
@@ -165,17 +154,52 @@ public class WordSearch {
 	
 	public static boolean checkForWordDiagonal (int row, int col, String userWord, char[][] currentBoard) {
 		boolean outcome;
-		outcome = checkDiagonalRight(row, col, userWord, currentBoard);
+		outcome = checkTopLeftToBottomRight(row, col, userWord, currentBoard);
 				if(!outcome) {
-					outcome = checkDiagonalLeft(row, col, userWord, currentBoard);
+					outcome = checkBottomRightToTopLeft(row, col, userWord, currentBoard);
+					if(!outcome) {
+						outcome = checkTopRightToBottomLeft(row, col, userWord, currentBoard);	
+						if(!outcome) {
+							outcome = checkBottomLeftToTopRight(row, col, userWord, currentBoard);
+						}
+					}
 				}
 		return outcome;
 	}
-	public static boolean checkDiagonalRight(int row, int col, String userWord, char[][] currentBoard) {
+	public static boolean checkTopLeftToBottomRight(int row, int col, String userWord, char[][] currentBoard) {
 		String output = "";
 		int a = 0;
 		while(a < userWord.length()) {
-			if(row >= userWord.length() - 1 && currentBoard[row].length - col > userWord.length() - 1) {
+			if(currentBoard[row].length - col >= userWord.length() && currentBoard.length - row >= userWord.length()) {
+				output += currentBoard[row + a][col + a];
+				if(output.equals(userWord)) {
+					return true;
+				}
+			}
+			a++;
+		}
+		return false;
+	}
+	public static boolean checkBottomRightToTopLeft(int row, int col, String userWord, char[][] currentBoard) {
+		String output = "";
+		int a = 0;
+		
+		while(a < userWord.length()) {
+			if(row > userWord.length() && col > userWord.length()) {
+				output += currentBoard[row - a][col - a];
+				if(output.equals(userWord)) {
+					return true;
+				}
+			}
+			a++;
+		}
+		return false;
+	}
+	public static boolean checkBottomLeftToTopRight(int row, int col, String userWord, char[][] currentBoard) {
+		String output = "";
+		int a = 0;
+		while(a < userWord.length()) {
+			if(row >= userWord.length() && currentBoard[row].length - col >= userWord.length()) {
 				output += currentBoard[row - a][col + a];
 				if(output.equals(userWord)) {
 					return true;
@@ -185,8 +209,8 @@ public class WordSearch {
 		}
 		return false;
 	}
-	//9 length
-	public static boolean checkDiagonalLeft(int row, int col, String userWord, char[][] currentBoard) {
+	
+	public static boolean checkTopRightToBottomLeft(int row, int col, String userWord, char[][] currentBoard) {
 		String output = "";
 		int a = 0;
 		while(a < userWord.length()) {
