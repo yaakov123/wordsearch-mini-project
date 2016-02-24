@@ -6,7 +6,7 @@ public class WordSearch {
 	public static void main(String[] args) {
 		Scanner input = new Scanner(System.in);
 		boolean isOfficialWord;
-		boolean continuePlaying = true; //used to determine whether or not the player wants to exit
+		boolean continuePlaying = true; 
 		int guesses = 20; //amount of guesses allowed for the game 
 		int guessesUsed = 0; //amount of guesses the player has already made 
 		// Changed the variable name to guessesUsed it makes a little more sense to me
