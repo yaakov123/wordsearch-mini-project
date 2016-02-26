@@ -8,19 +8,20 @@ public class WordSearch {
 		boolean isOfficialWord;
 		boolean continuePlaying = true; //used to determine whether or not the player wants to exit
 
-		String[] wordsInGameBoardOne = {"LAID", "WED", "STOP", "FROM", "FED", "VAT"};
+		String[] wordsInGameBoardOne = {"BLUE", "ORANGE", "BLACK", "RED", "GREEN", "YELLOW"};
 		String[] wordsInGameBoardTwo = {"This"}; // The reason for this array is so I could add the code for the words in the second board
 		ArrayList<String> wordsGuessed = new ArrayList<String>(wordsInGameBoardOne.length); // I don't understand why the size of the array is wordsInGameBoardOne.length, are you making another array for Board 2? 
 
-		char[][] gameBoardOne = {{'L', 'A', 'I', 'D', 'E', 'F', 'L', 'A', 'D'},
-								 {'J', 'A', 'A', 'M', 'N', 'O', 'P', 'Q', 'R'},
-							     {'S', 'V', 'D', 'V', 'A', 'T', 'Y', 'Z', 'A'},
-							     {'A', 'B', 'C', 'S', 'A', 'F', 'G', 'V', 'A'},
-							     {'J', 'K', 'A', 'M', 'R', 'O', 'P', 'Q', 'R'},
-							     {'S', 'T', 'C', 'O', 'W', 'E', 'D', 'Z', 'L'},
-							     {'A', 'B', 'M', 'D', 'E', 'F', 'G', 'H', 'Y'},
-								 {'J', 'K', 'T', 'M', 'N', 'O', 'P', 'Q', 'R'},
-							     {'S', 'T', 'O', 'P', 'W', 'X', 'Y', 'Z', 'E'}};
+		char[][] gameBoardOne = {{'F', 'I', 'D', 'W', 'Q', 'E', 'J', 'P', 'F', 'C'},
+								 {'N', 'E', 'E', 'R', 'G', 'U', 'N', 'Q', 'V', 'M'},
+								 {'R', 'B', 'E', 'X', 'J', 'L', 'H', 'C', 'L', 'O'},
+								 {'C', 'C', 'P', 'J', 'J', 'B', 'S', 'V', 'W', 'R'},
+								 {'K', 'P', 'V', 'L', 'L', 'Y', 'Z', 'X', 'W', 'A'},
+								 {'K', 'C',	'O', 'U', 'E', 'J', 'M', 'T', 'N', 'N'},
+								 {'T', 'Y', 'A', 'L', 'T', 'K', 'X', 'Q', 'Q', 'G'},
+								 {'G', 'Z', 'L', 'L', 'P', 'K', 'F', 'P', 'N', 'E'},
+								 {'J', 'O', 'H', 'L', 'B', 'A', 'X', 'Q', 'W', 'O'},
+								 {'W', 'D', 'U', 'C', 'D', 'G', 'I', 'G', 'Q', 'U'}};
 		
 		char[][] gameBoardTwo = {{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R'},
 								 {'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R'},
@@ -66,7 +67,7 @@ public class WordSearch {
 		
 		//letting the player know how many words they are looking for
 		if(currentBoard == gameBoardOne) 
-			System.out.println("There are 6 words hidden in this puzzle"); 
+			System.out.println("There are " + wordsInGameBoardOne.length + " words hidden in this puzzle"); 
 		else 
 			System.out.println("There are ... words hidden in the puzzle"); // we haven't yet coded words for the second game board
 			
@@ -185,7 +186,7 @@ public class WordSearch {
 		int a = 0;
 		
 		while(a < userWord.length()) {
-			if(row > userWord.length() && col > userWord.length()) {
+			if(row >= userWord.length() - 1&& col >= userWord.length() - 1) {
 				output += currentBoard[row - a][col - a];
 				if(output.equals(userWord)) {
 					return true;
@@ -199,7 +200,7 @@ public class WordSearch {
 		String output = "";
 		int a = 0;
 		while(a < userWord.length()) {
-			if(row >= userWord.length() && currentBoard[row].length - col >= userWord.length()) {
+			if(row >= userWord.length() - 1 && currentBoard[row].length - col >= userWord.length()) {
 				output += currentBoard[row - a][col + a];
 				if(output.equals(userWord)) {
 					return true;
@@ -238,7 +239,7 @@ public class WordSearch {
 		int a = 0;
 		
 		while( a < userWord.length()) {
-			if(row >= userWord.length()) {
+			if(row >= userWord.length() - 1) {
 				output += currentBoard[row - a][col];
 				if(output.equals(userWord)) {
 					return true;
