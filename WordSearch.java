@@ -11,7 +11,9 @@ public class WordSearch {
 		String[] wordsInGameBoardOne = {"BLUE", "ORANGE", "BLACK", "RED", "GREEN", "YELLOW"};
 		String[] wordsInGameBoardTwo = {"This"}; // The reason for this array is so I could add the code for the words in the second board
 		ArrayList<String> wordsGuessed = new ArrayList<String>(wordsInGameBoardOne.length); // I don't understand why the size of the array is wordsInGameBoardOne.length, are you making another array for Board 2? 
-
+// The reason the above line has a length of wordsInGameBoardOne is because that is the maximum length that will be needed
+		// and it's more memory efficient to pre-declare the capacity of an ArrayList (I think)
+		
 		char[][] gameBoardOne = {{'F', 'I', 'D', 'W', 'Q', 'E', 'J', 'P', 'F', 'C'},
 								 {'N', 'E', 'E', 'R', 'G', 'U', 'N', 'Q', 'V', 'M'},
 								 {'R', 'B', 'E', 'X', 'J', 'L', 'H', 'C', 'L', 'O'},
@@ -79,6 +81,7 @@ public class WordSearch {
 			System.out.println("Please enter the word you would like to search for or exit to quit the game >>> ");
 			String userWord = input.nextLine().toUpperCase();
 			char firstLetter = userWord.charAt(0);
+			String reverse = reverseWord(userWord);
 			 
 			
 			if(userWord.equals("EXIT")){
@@ -87,7 +90,7 @@ public class WordSearch {
 			}
 			
 				
-			boolean happens = checkForWord(currentBoard, userWord, firstLetter);
+			boolean happens = checkForWord(currentBoard, userWord, firstLetter, reverse);
 		
 			if(currentBoard == gameBoardOne) {
 				isOfficialWord = checkForWordInArray(userWord, wordsInGameBoardOne);
@@ -129,21 +132,21 @@ public class WordSearch {
 		}
 		return false;
 	}
-	public static boolean checkForWord(char[][] currentBoard, String userWord, char firstLetter) {
+	public static boolean checkForWord(char[][] currentBoard, String userWord, char firstLetter, String reverse) {
 		boolean wordHappens = false;
 		outerloop:
 		for(int i = 0; i < currentBoard.length; i++) {
 			for(int j = 0; j < currentBoard[i].length; j++) {
-				if(currentBoard[i][j] == firstLetter) {
-					wordHappens = checkForWordHorizontal(i, j, userWord, currentBoard);
+				if(currentBoard[i][j] == firstLetter || currentBoard[i][j] == reverse.charAt(0)) {
+					wordHappens = checkForWordHorizontal(i, j, userWord, currentBoard, reverse);
 					if(wordHappens) {
 						break outerloop;
 					}
-					wordHappens = checkForWordVertical(i, j, userWord, currentBoard);
+					wordHappens = checkForWordVertical(i, j, userWord, currentBoard, reverse);
 					if(wordHappens) {
 						break outerloop;
 					}
-					wordHappens = checkForWordDiagonal(i, j, userWord, currentBoard);
+					wordHappens = checkForWordDiagonal(i, j, userWord, currentBoard, reverse);
 					if(wordHappens) {
 						break outerloop;
 					}
@@ -153,42 +156,31 @@ public class WordSearch {
 		return wordHappens;
 	}
 	
-	public static boolean checkForWordDiagonal (int row, int col, String userWord, char[][] currentBoard) {
+	public static String reverseWord(String userWord) {
+		StringBuilder sbReverse = new StringBuilder(userWord);
+		sbReverse.reverse();
+		String reverse = sbReverse.toString();
+		return reverse;
+	}	
+	
+	public static boolean checkForWordDiagonal (int row, int col, String userWord, char[][] currentBoard, String reverse) {
 		boolean outcome;
-		outcome = checkTopLeftToBottomRight(row, col, userWord, currentBoard);
-				if(!outcome) {
-					outcome = checkBottomRightToTopLeft(row, col, userWord, currentBoard);
-					if(!outcome) {
-						outcome = checkTopRightToBottomLeft(row, col, userWord, currentBoard);	
-						if(!outcome) {
-							outcome = checkBottomLeftToTopRight(row, col, userWord, currentBoard);
-						}
-					}
-				}
+			outcome = checkBottomRightToTopLeft(row, col, userWord, currentBoard, reverse);
+			if(!outcome) {
+				outcome = checkTopRightToBottomLeft(row, col, userWord, currentBoard, reverse);	
+
+			}
 		return outcome;
 	}
-	public static boolean checkTopLeftToBottomRight(int row, int col, String userWord, char[][] currentBoard) {
-		String output = "";
-		int a = 0;
-		while(a < userWord.length()) {
-			if(currentBoard[row].length - col >= userWord.length() && currentBoard.length - row >= userWord.length()) {
-				output += currentBoard[row + a][col + a];
-				if(output.equals(userWord)) {
-					return true;
-				}
-			}
-			a++;
-		}
-		return false;
-	}
-	public static boolean checkBottomRightToTopLeft(int row, int col, String userWord, char[][] currentBoard) {
+
+	public static boolean checkBottomRightToTopLeft(int row, int col, String userWord, char[][] currentBoard, String reverse) {
 		String output = "";
 		int a = 0;
 		
 		while(a < userWord.length()) {
 			if(row >= userWord.length() - 1&& col >= userWord.length() - 1) {
 				output += currentBoard[row - a][col - a];
-				if(output.equals(userWord)) {
+				if(output.equals(userWord) || output.equals(reverse)) {
 					return true;
 				}
 			}
@@ -196,28 +188,14 @@ public class WordSearch {
 		}
 		return false;
 	}
-	public static boolean checkBottomLeftToTopRight(int row, int col, String userWord, char[][] currentBoard) {
-		String output = "";
-		int a = 0;
-		while(a < userWord.length()) {
-			if(row >= userWord.length() - 1 && currentBoard[row].length - col >= userWord.length()) {
-				output += currentBoard[row - a][col + a];
-				if(output.equals(userWord)) {
-					return true;
-				}
-			}
-			a++;
-		}
-		return false;
-	}
-	
-	public static boolean checkTopRightToBottomLeft(int row, int col, String userWord, char[][] currentBoard) {
+
+	public static boolean checkTopRightToBottomLeft(int row, int col, String userWord, char[][] currentBoard, String reverse) {
 		String output = "";
 		int a = 0;
 		while(a < userWord.length()) {
 			if(col >= userWord.length() - 1 && currentBoard[row].length - row >= userWord.length()) {
 				output += currentBoard[row + a][col - a];
-				if(output.equals(userWord)) {
+				if(output.equals(userWord) || output.equals(reverse)) {
 					return true;
 				}
 			}
@@ -226,37 +204,19 @@ public class WordSearch {
 		return false;
 	}
 	//-------------------------------------------------------------------------------------------------------
-	public static boolean checkForWordVertical(int row, int col, String userWord, char[][] currentBoard){
+	public static boolean checkForWordVertical(int row, int col, String userWord, char[][] currentBoard, String reverse){
 		boolean outcome;
-		outcome = checkDown(row, col, userWord, currentBoard);
-		if(!outcome) {
-			outcome = checkUp(row, col, userWord, currentBoard);
-		}
+		outcome = checkUp(row, col, userWord, currentBoard, reverse);
 		return outcome;
 	}
-	public static boolean checkUp(int row, int col, String userWord, char[][] currentBoard) {
+	public static boolean checkUp(int row, int col, String userWord, char[][] currentBoard, String reverse) {
 		String output = "";
 		int a = 0;
 		
 		while( a < userWord.length()) {
 			if(row >= userWord.length() - 1) {
 				output += currentBoard[row - a][col];
-				if(output.equals(userWord)) {
-					return true;
-				}
-			}
-			a++;
-		}
-		return false;
-	}
-	public static boolean checkDown(int row, int col, String userWord, char[][] currentBoard) {
-		String output = "";
-		int a = 0;
-		
-		while( a < userWord.length()) {
-			if(currentBoard[row].length - row >= userWord.length()) {
-				output += currentBoard[row + a][col];
-				if(output.equals(userWord)) {
+				if(output.equals(userWord) || output.equals(reverse)) {
 					return true;
 				}
 			}
@@ -265,41 +225,24 @@ public class WordSearch {
 		return false;
 	}
 	//----------------------------------------------------------------------------------------------------
-	public static boolean checkForWordHorizontal(int row, int col, String userWord, char[][] currentBoard) {
+	public static boolean checkForWordHorizontal(int row, int col, String userWord, char[][] currentBoard, String reverse) {
 		boolean outcome;
-		outcome = checkRight(row, col, userWord, currentBoard);
-		if(!outcome) {
-			outcome = checkLeft(row, col, userWord, currentBoard);
-		}
+		outcome = checkRight(row, col, userWord, currentBoard, reverse);
 		return outcome;
 	}
-	public static boolean checkRight(int row, int col, String userWord, char[][] currentBoard) {
+	public static boolean checkRight(int row, int col, String userWord, char[][] currentBoard, String reverse) {
 		String output = "";
 		int a = 0;
 		while(a < userWord.length()) {
 			if(currentBoard[row].length - col > userWord.length() - 1) {	
 				output += currentBoard[row][col + a];
-				if(output.equals(userWord)) {
+				if(output.equals(userWord) || output.equals(reverse)) {
 					return true;
 				}
 				
 			}
 			a++;
 			
-		}
-		return false;
-	}
-	public static boolean checkLeft(int row, int col, String userWord, char[][] currentBoard) {
-		String output = "";
-		int a = 0;
-		while(a <= userWord.length() - 1) {
-			if(col >= userWord.length() - 1) {
-				output += currentBoard[row][col - a];
-				if(output.equals(userWord)) {
-					return true;
-				}
-			}
-			a++;
 		}
 		return false;
 	}
